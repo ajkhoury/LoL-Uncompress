@@ -14,6 +14,7 @@ namespace LolUncompress
 
         private static void UncompressFile(string inFile, string outFile)
         {
+            // Do it slow way because calling CopyStream sometimes causes an inflated exception on LoL comrpessed files
             int stopByte = -1;
             System.IO.FileStream outFileStream = new System.IO.FileStream(outFile, System.IO.FileMode.Create);
             ZInputStream inZStream = new ZInputStream(System.IO.File.Open(inFile, System.IO.FileMode.Open, System.IO.FileAccess.Read));
