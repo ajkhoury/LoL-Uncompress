@@ -1,6 +1,9 @@
 ﻿using System;
-using System.Windows.Forms;
 using ComponentAce.Compression.Libs.zlib;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Timers;
+using System.Windows.Forms;
 
 namespace LolUncompress
 {
@@ -27,6 +30,17 @@ namespace LolUncompress
             outFileStream.Close();
         }
 
+        private void SetStatus(Button btn, string status)
+        {
+            btn.Text = status;
+            btn.Refresh();
+            Application.DoEvents();
+        }
+
+        private void OnTimedEvent(object sender, EventArgs e)
+        {
+            button1.Text = "Decompress...";
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -40,9 +54,19 @@ namespace LolUncompress
                 saveFileDialog1.FileName = openFileDialog1.FileName + ".decompressed";
                 if (saveFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
+                    SetStatus(button1, "Decompressing...");
                     UncompressFile(openFileDialog1.FileName, saveFileDialog1.FileName);
+                    SetStatus(button1, "Decompressed!");
+
+                    var statusTimer = new System.Windows.Forms.Timer();
+                    statusTimer.Interval = 2500;
+                    statusTimer.Tick += OnTimedEvent;
+                    statusTimer.Start();
                 }
             }
         }
+
+        
+
     }
 }
